@@ -7,3 +7,6 @@
 # Claude Code: configuracion local
 .claude/settings.local.json
 .claude/worktrees/
+
+# Configuracion local con credenciales (copiar de include/config.example.h)
+include/config.h

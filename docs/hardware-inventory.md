@@ -39,6 +39,7 @@ Que el DHT11 funcione con el firmware actual no permite deducir sus datos eléct
 | Elemento | Estado |
 |---|---|
 | Lectura del DHT11 en GPIO4 (`src/main.cpp`) | Implementada y compilada. Probada físicamente: el usuario confirmó que muestra lecturas en el monitor serie |
+| Wi-Fi + publicación MQTT (`src/main.cpp`) | Implementada y compilada. **No probada** en hardware ni contra el broker |
 | Resto del sistema | No implementado |
 
 ## Datos pendientes de verificar
