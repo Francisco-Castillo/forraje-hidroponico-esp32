@@ -1,6 +1,6 @@
 # Firmware: Wi-Fi y publicación MQTT
 
-Estado: implementado y **compilado** (`pio run`). **No probado** en hardware ni contra el broker.
+Estado: implementado y **compilado** (`pio run`). **Probado en hardware (2026-10-29)** el camino feliz: Wi-Fi, NTP, MQTT con autenticación, publicación al Mosquitto del backend y fila en TimescaleDB. **Sin probar** los casos de fallo.
 
 Contrato de referencia (fuente de verdad): `docs/mqtt-contract.md` del backend `sensores`.
 
@@ -25,4 +25,4 @@ Contrato de referencia (fuente de verdad): `docs/mqtt-contract.md` del backend `
 
 ## Pruebas pendientes
 
-Ver el plan: publicar con el broker local, comprobar la fila en TimescaleDB, y fallos (Wi-Fi caído, broker detenido, sensor desconectado, clave MQTT errónea).
+Camino feliz ya verificado (publicación recibida con `mosquitto_sub` y filas en `lecturas` con el backend en marcha). Quedan los fallos (Wi-Fi caído, broker detenido, sensor desconectado, clave MQTT errónea).

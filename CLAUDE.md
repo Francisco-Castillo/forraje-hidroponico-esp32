@@ -39,7 +39,7 @@ Inventario completo y estado de cada dato: `docs/hardware-inventory.md`.
 
 La lectura del DHT11 ya funciona: `src/main.cpp` lee temperatura y humedad cada 2 s y las muestra por el monitor serie (el usuario lo confirmó en el hardware).
 
-Wi-Fi y publicación MQTT (Mosquitto del backend `sensores`) están implementados y compilan; **no probados** en hardware ni contra el broker. Ver [docs/firmware.md](docs/firmware.md). Credenciales en `include/config.h` (no versionado; modelo `include/config.example.h`).
+Wi-Fi y publicación MQTT (Mosquitto del backend `sensores`) están implementados y compilan; el camino feliz fue probado en hardware el 2026-10-29 (llega al broker y se guarda en la base); los casos de fallo **no están probados**. Ver [docs/firmware.md](docs/firmware.md). Credenciales en `include/config.h` (no versionado; modelo `include/config.example.h`).
 
 ## Agentes y skills
 
