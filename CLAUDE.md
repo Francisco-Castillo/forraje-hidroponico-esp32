@@ -39,9 +39,11 @@ Inventario completo y estado de cada dato: `docs/hardware-inventory.md`.
 
 La lectura del DHT11 ya funciona: `src/main.cpp` lee temperatura y humedad cada 2 s y las muestra por el monitor serie (el usuario lo confirmó en el hardware).
 
+Wi-Fi y publicación MQTT (Mosquitto del backend `sensores`) están implementados y compilan; **no probados** en hardware ni contra el broker. Ver [docs/firmware.md](docs/firmware.md). Credenciales en `include/config.h` (no versionado; modelo `include/config.example.h`).
+
 ## Agentes y skills
 
 - Agentes en `.claude/agents/`: `iot-developer` (implementa), `iot-architect` (diseña), `electronics-technician` (revisa circuitos) y `technical-writer` (documenta).
 - Skills en `.claude/skills/`: `electronics-review` y `update-documentation`.
 
-No añadir Wi-Fi, MQTT, bases de datos, aplicaciones móviles ni servicios en la nube hasta que el usuario lo solicite.
+Wi-Fi y MQTT fueron solicitados por el usuario. No añadir bases de datos, aplicaciones móviles, servicios en la nube, TLS ni otra infraestructura hasta que el usuario lo solicite.
