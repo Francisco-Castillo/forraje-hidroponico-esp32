@@ -3,6 +3,7 @@
 #include <PubSubClient.h>
 #include <time.h>
 #include "config.h"
+#include "moisture.h"
 
 constexpr uint8_t DHT_PIN = 4;
 constexpr uint32_t TIMEOUT_US = 200;
@@ -161,6 +162,7 @@ static bool publishReading(time_t ts, float tempC, float humidity) {
 void setup() {
   Serial.begin(115200);
   pinMode(DHT_PIN, INPUT_PULLUP);
+  moistureBegin();
 
   bootId = esp_random();
   snprintf(topic, sizeof(topic), "fvh/%s/lecturas", DEVICE_ID);
@@ -182,6 +184,9 @@ void loop() {
   static uint32_t lastRead = 0;
   if (millis() - lastRead < READ_INTERVAL_MS) return;
   lastRead = millis();
+
+  MoistureReading soil = moistureRead();
+  Serial.printf("Suelo (sin calibrar): raw=%u  %lu mV\n", soil.raw, (unsigned long)soil.millivolts);
 
   float t, h;
   DhtResult r = readDHT11(t, h);
