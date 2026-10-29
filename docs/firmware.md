@@ -21,9 +21,9 @@ Contrato de referencia (fuente de verdad): `docs/mqtt-contract.md` del backend `
 
 - Sensor capacitivo en GPIO34 (`src/moisture.cpp`). Cada ciclo se muestra por Serial el valor crudo y los mV, **sin calibrar: no es un porcentaje**.
 - Cada mensaje incluye el campo opcional `measurements.soilMoistureRaw` (entero 0–4095, promedio de 16 lecturas del ADC). Tópico y campos del DHT11 no cambian.
-- El backend actual **ignora** el campo y no lo guarda (comprobado con un mensaje de prueba: la fila se guarda sin él). Para persistirlo hacen falta una migración, el parser y `mqtt-contract.md` del backend, que no se han tocado.
+- El backend lo valida (entero 0–4095, opcional) y lo guarda en `lecturas.humedad_suelo_raw` (migración `V4`); la API lo devuelve como `soilMoistureRaw`. Verificado el 2026-10-29 con el ESP32 real: filas con valores ~3245.
 - Si el DHT11 falla no se publica nada (también se pierde la lectura del suelo).
-- Estado: compilado; el firmware con este campo **no se ha probado en el ESP32**.
+- Estado: compilado y probado en el ESP32 el 2026-10-29 (camino feliz: publica, llega al broker y se guarda). Casos de fallo sin probar; el valor sigue **sin calibrar**.
 
 ## Diferencias con el contrato
 
