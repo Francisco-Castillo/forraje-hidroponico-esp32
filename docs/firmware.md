@@ -17,6 +17,14 @@ Contrato de referencia (fuente de verdad): `docs/mqtt-contract.md` del backend `
 - `timestamp`: UTC con `Z`, tomado de NTP (`pool.ntp.org`, `time.google.com`) en el instante de la lectura. Si la hora es anterior a 2024-01-01 (NTP aún sin sincronizar) no se publica.
 - Reconexión de Wi-Fi y MQTT no bloqueante con espera creciente (1 s a 30 s). No se reinicia el ESP32 por errores de red.
 
+## Humedad de suelo (etapa 2, opción A)
+
+- Sensor capacitivo en GPIO34 (`src/moisture.cpp`). Cada ciclo se muestra por Serial el valor crudo y los mV, **sin calibrar: no es un porcentaje**.
+- Cada mensaje incluye el campo opcional `measurements.soilMoistureRaw` (entero 0–4095, promedio de 16 lecturas del ADC). Tópico y campos del DHT11 no cambian.
+- El backend actual **ignora** el campo y no lo guarda (comprobado con un mensaje de prueba: la fila se guarda sin él). Para persistirlo hacen falta una migración, el parser y `mqtt-contract.md` del backend, que no se han tocado.
+- Si el DHT11 falla no se publica nada (también se pierde la lectura del suelo).
+- Estado: compilado; el firmware con este campo **no se ha probado en el ESP32**.
+
 ## Diferencias con el contrato
 
 - **QoS 0**: PubSubClient no publica con QoS 1; el contrato pide QoS 1. Un mensaje puede perderse sin aviso. Aceptado para la primera versión.
