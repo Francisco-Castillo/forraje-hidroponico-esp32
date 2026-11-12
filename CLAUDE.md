@@ -27,13 +27,13 @@ El usuario es desarrollador Java backend, pero está aprendiendo electrónica e 
 
 ## Hardware
 
-- Microcontrolador: ESP32. Definición de PlatformIO: `esp32dev`. El modelo físico exacto está pendiente de verificar.
+- Microcontrolador: ESP32. Definición de PlatformIO: `esp32dev`. Placa física según el usuario: NodeMCU ESP32S (sin verificar en la placa).
 - Sensor: DHT11 (módulo de 3 pines).
 - Conexiones confirmadas: DATA del DHT11 en GPIO4. El resto está pendiente de verificar (tensión de alimentación y orden de los pines del módulo).
 - Framework: Arduino.
 - Sistema de compilación: PlatformIO.
 
-Inventario completo y estado de cada dato: `docs/hardware-inventory.md`.
+Inventario completo y estado de cada dato: `docs/hardware-inventory.md` (incluye el serigrafiado de la placa leído de una foto; discrepancia pendiente en el pin junto a 5V).
 
 ## Estado del proyecto
 
@@ -41,9 +41,15 @@ La lectura del DHT11 ya funciona: `src/main.cpp` lee temperatura y humedad cada 
 
 Wi-Fi y publicación MQTT (Mosquitto del backend `sensores`) están implementados y compilan; el camino feliz fue probado en hardware el 2026-10-29 (llega al broker y se guarda en la base); los casos de fallo **no están probados**. Ver [docs/firmware.md](docs/firmware.md). Credenciales en `include/config.h` (no versionado; modelo `include/config.example.h`).
 
+Actuadores: la bomba (`src/pump.cpp`, GPIO26, tecla `p`, se apaga sola a los 3 s) y el cooler (`src/cooler.cpp`, GPIO17, tecla `f`, sin límite de tiempo) se manejan a mano por el monitor serie. El cooler fue probado en hardware el 2026-11-12 (confirmación del usuario); la bomba con este montaje **no está probada**. Sin control automático ni MQTT. Conexionado: [docs/conexionado-protoboard.md](docs/conexionado-protoboard.md).
+
+## Dirección: Kit Starter autónomo (en diseño)
+
+El usuario decidió (2026-11-03) evolucionar hacia un "Kit Starter plug & play" que funcione localmente, sin exponerse a internet: el ESP32 crea su Wi-Fi, sirve la web desde una microSD y guarda el histórico en ella. El backend Spring Boot/Mosquitto (`sensores`) **se mantiene** para desarrollo y una futura versión "pro". Es solo diseño: no hay código ni hardware nuevo, y cada paso requiere un plan aprobado. Ver [docs/kit-starter.md](docs/kit-starter.md) (riesgos incluidos) e ideas originales en `docs/ideas/`. Primera fase: cultivo manual, ver [docs/fase-0-plan.md](docs/fase-0-plan.md) (planilla en `docs/templates/registro-lotes.xlsx`).
+
 ## Agentes y skills
 
 - Agentes en `.claude/agents/`: `iot-developer` (implementa), `iot-architect` (diseña), `electronics-technician` (revisa circuitos) y `technical-writer` (documenta).
 - Skills en `.claude/skills/`: `electronics-review` y `update-documentation`.
 
-Wi-Fi y MQTT fueron solicitados por el usuario. No añadir bases de datos, aplicaciones móviles, servicios en la nube, TLS ni otra infraestructura hasta que el usuario lo solicite.
+Wi-Fi y MQTT fueron solicitados por el usuario. El Kit Starter (microSD, punto de acceso Wi-Fi, servidor web local) fue solicitado por el usuario como dirección, pero se implementa por pasos aprobados. No añadir bases de datos, aplicaciones móviles, servicios en la nube, TLS ni otra infraestructura hasta que el usuario lo solicite.
