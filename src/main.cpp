@@ -4,6 +4,8 @@
 #include <time.h>
 #include "config.h"
 #include "moisture.h"
+#include "pump.h"
+#include "cooler.h"
 
 constexpr uint8_t DHT_PIN = 4;
 constexpr uint32_t TIMEOUT_US = 200;
@@ -164,6 +166,8 @@ void setup() {
   Serial.begin(115200);
   pinMode(DHT_PIN, INPUT_PULLUP);
   moistureBegin();
+  pumpBegin();
+  coolerBegin();
 
   bootId = esp_random();
   snprintf(topic, sizeof(topic), "fvh/%s/lecturas", DEVICE_ID);
@@ -181,6 +185,26 @@ void loop() {
   maintainWifi();
   maintainMqtt();
   mqtt.loop();
+
+  // Prueba manual de la bomba: 'p' por el monitor serie la enciende (se apaga sola)
+  pumpUpdate();
+  while (Serial.available()) {
+    char c = Serial.read();
+    if (c == 'p' && !pumpIsOn()) {
+      pumpStart();
+      Serial.println("Bomba: encendida");
+    }
+    // Prueba manual del cooler: 'f' lo alterna (sin limite de tiempo)
+    if (c == 'f') {
+      if (coolerIsOn()) {
+        coolerOff();
+        Serial.println("Cooler: apagado");
+      } else {
+        coolerOn();
+        Serial.println("Cooler: encendido");
+      }
+    }
+  }
 
   static uint32_t lastRead = 0;
   if (millis() - lastRead < READ_INTERVAL_MS) return;
