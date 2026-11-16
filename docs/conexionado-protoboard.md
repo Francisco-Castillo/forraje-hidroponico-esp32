@@ -1,6 +1,6 @@
 # Conexionado: ESP32 + sensores + bomba + cooler (protoboard)
 
-Estado (2026-11-12): el usuario indicó que el montaje está conectado. **Solo el cooler está probado en hardware**: el usuario confirmó que funciona al pulsar `f` por el monitor serie (`src/cooler.cpp`, GPIO17). La bomba (`src/pump.cpp`, tecla `p`) y el flotador **no se han probado con este montaje**; para el flotador no hay firmware. No se midió corriente ni calentamiento, y la polaridad del cooler no se leyó en su etiqueta (funciona con negro − y blanco +). El resto de este documento conserva el diseño y las comprobaciones originales. Imagen: [img/conexionado-protoboard.png](img/conexionado-protoboard.png) (fuente editable: [.svg](img/conexionado-protoboard.svg)).
+Estado (2026-11-16): el sensor de suelo **no está conectado** (con P34 al aire las lecturas de suelo son ruido, no mediciones) y la etapa del cooler está **desconectada** del montaje. **La bomba fue probada en hardware el 2026-11-16** (confirmación del usuario) con un ESP32 nuevo, el MOSFET etiquetado IRLZ44Z (el que venía del cooler) y R2 de 10 kΩ colocada: gira solo al pulsar `p` por el monitor serie (`src/pump.cpp`, GPIO26) y no arranca sola al enchufar. El cooler se probó el 2026-11-12 (tecla `f`, GPIO17) con la etapa anterior, hoy desmontada. El flotador **no está probado**; para el flotador no hay firmware. Dibujos de las pruebas de la bomba: [mínimo](img/conexionado%20protoboard%20bomba.png) y [con R2](img/conexionado%20protoboard%20bomba%20R2.png). **Incidente:** un primer ESP32 dejó de responder (ni admitía la subida ni emitía por serie); el usuario cree que pudo tocar un cable de 12 V, sin confirmar. Un cable rojo suelto del adaptador plug a bornes falseó varias pruebas, así que conclusiones como "un MOSFET está defectuoso" **no son fiables**. No se midió corriente ni calentamiento, y la polaridad del cooler no se leyó en su etiqueta (funciona con negro − y blanco +). El resto de este documento conserva el diseño y las comprobaciones originales. Diseño para la PCB casera: [pcb/esquematico-pcb.pdf](pcb/esquematico-pcb.pdf) y borrador del trazado [pcb/layout-pcb-borrador.pdf](pcb/layout-pcb-borrador.pdf). Imagen: [img/conexionado-protoboard.png](img/conexionado-protoboard.png) (fuente editable: [.svg](img/conexionado-protoboard.svg)).
 
 ![Conexionado](img/conexionado-protoboard.png)
 
@@ -14,7 +14,7 @@ Estado (2026-11-12): el usuario indicó que el montaje está conectado. **Solo e
 | Rango de alimentación y de AOUT del sensor de suelo | Se alimenta con 3,3 V según lo propuesto, sin verificar |
 | Colores de la bomba (marrón +, azul −) | Dato del vendedor; la etiqueta no indica polaridad |
 | Función del cable amarillo | Desconocida; no se conecta |
-| Hoja de datos del IRLZ44N con 3,3 V en la compuerta | No se leyó en esta sesión: confirmar que conduce bien con 3,3 V |
+| IRLZ44Z con 3,3 V en la compuerta (el MOSFET en uso, etiqueta leída por el usuario el 2026-11-16) | Hoja de datos IRLZ44Z/S/LPbF leída (2026-11-16): pines 1 G, 2 D, 3 S; VGS(th) 1,0–3,0 V; RDS(on) máx. 13,5 mΩ (10 V), 20 mΩ (5 V), 22,5 mΩ (4,5 V); sin valor garantizado a 3,3 V; la curva típica (Fig. 3, leída a ojo) da ≈10 A hacia 3,2 V. Con el cooler (2026-11-12) y con la bomba (2026-11-16) funciona en el montaje (observación del usuario). Antes se documentó como IRLZ44N (VGS(th) 1,0–2,0 V; ≈20 A a 3 V típicos): el usuario indicó después que la etiqueta dice IRLZ44Z |
 | Corriente real de la bomba | Estimada en 15 W ÷ 12 V ≈ 1,25 A, sin medir |
 | Corriente del cooler | No se sabe (cooler genérico de 12 V). Si es un ventilador de PC típico suele ser una fracción de amperio, pero es un dato general, no medido: leer la etiqueta o medir |
 | Polaridad del cooler | Montado con negro (−) y blanco (+) y funciona (observación del usuario); no se leyó en etiqueta ni carcasa |
@@ -72,7 +72,7 @@ El ESP32 se alimenta por su USB; los 12 V solo van a la bomba y al cooler. **Nun
 2. Cada pin del ESP32 coincide con la etiqueta de su placa (no con la posición del dibujo).
 3. Con multímetro y sin energía: continuidad entre los GND (fuente −, riel GND, GND del ESP32) y **sin** continuidad entre +12 V y GND, ni entre 3V3 y GND.
 4. Diodo con la banda hacia +12 V; capacitor con la franja (−) hacia GND.
-5. MOSFET visto de frente (cara con texto): G, D, S de izquierda a derecha. Confirmar en su hoja de datos.
+5. MOSFET visto de frente (cara con texto): G, D, S de izquierda a derecha (confirmado en las hojas de datos de Infineon del IRLZ44NPbF y del IRLZ44ZPbF).
 6. La bomba sumergida antes de enchufar.
 7. Primera prueba: solo la bomba con la fuente (como ya hiciste), luego con el MOSFET comandado a mano con un cable a 3,3 V en la compuerta, y solo al final con el ESP32.
 8. Cooler: confirmar la polaridad (flecha o signos en la carcasa, o etiqueta) antes de conectarlo; repetir con el MOSFET 2 el mismo diodo (banda a +12 V), la misma comprobación de continuidad y la misma secuencia de pruebas que con la bomba.

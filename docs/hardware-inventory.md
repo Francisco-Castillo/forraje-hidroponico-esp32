@@ -48,9 +48,9 @@ Cara con el logo NodeMCU y la rotulación "ESP-32S V1.1", con el USB abajo. Vist
 
 | Elemento | Estado |
 |---|---|
-| Bomba de agua | Modelo JT500, 12 V DC, 15 W (etiqueta, leída por el usuario). Comprada. Prueba corta sola el 2026-11-04: gira, silenciosa, caudal fuerte (observación del usuario). Corriente sin medir. Cable amarillo: función desconocida, sin conectar | Probada sola; no conectada al ESP32 |
+| Bomba de agua | Modelo JT500, 12 V DC, 15 W (etiqueta, leída por el usuario). Comprada. Prueba corta sola el 2026-11-04: gira, silenciosa, caudal fuerte (observación del usuario). Corriente sin medir. Cable amarillo: función desconocida, sin conectar | Probada sola el 2026-11-04 y con el ESP32 el 2026-11-16 (ver Estado de las pruebas) |
 | Cooler (ventilador) | Genérico, 12 V DC, 2 cables, negro y blanco (indicado por el usuario el 2026-11-12). Corriente y modelo **sin verificar**. Polaridad: se montó negro (−) y blanco (+) sin leerla en etiqueta o flecha; el cooler funciona así (observación del usuario) | Indicado por el usuario; probado con el ESP32 y el MOSFET |
-| MOSFET IRLZ44N (segundo, para el cooler) | El usuario tiene uno disponible (indicado el 2026-11-12) | Confirmado por el usuario; en uso con el cooler |
+| MOSFET en uso en la etapa de la bomba: etiqueta **IRLZ44Z** (leída por el usuario el 2026-11-16), el que venía de la etapa del cooler. Antes figuraba como IRLZ44N; los datos de [pcb/esquematico-pcb.pdf](pcb/esquematico-pcb.pdf) son de la IRLZ44N y **no se han actualizado**. Datos de la IRLZ44Z en [conexionado-protoboard.md](conexionado-protoboard.md) | Hay otro MOSFET, que el 2026-11-16 pareció no funcionar, pero esa prueba se hizo con un cable rojo suelto en el adaptador: **no se puede concluir que esté defectuoso**; su modelo no está confirmado | Confirmado por el usuario (etiqueta); funciona con el cooler y con la bomba |
 | Iluminación | No seleccionada |
 | Fuente de 12 V y 3 A + adaptador plug a bornes | Comprados por el usuario para la bomba; sin medir con multímetro | Confirmado por el usuario |
 | Otras fuentes de alimentación | No seleccionadas |
@@ -67,6 +67,7 @@ Cara con el logo NodeMCU y la rotulación "ESP-32S V1.1", con el USB abajo. Vist
 | Wi-Fi + publicación MQTT (`src/main.cpp`) | Implementada y compilada. Probada en hardware el 2026-10-29: llega al broker y se guarda en TimescaleDB. Casos de fallo (Wi-Fi caído, broker detenido, sensor desconectado, clave MQTT errónea) **sin probar** |
 | Lectura del sensor de humedad de suelo (`src/moisture.cpp`) | Implementada y compilada (`pio run`). **Sin probar en hardware.** Solo Serial (raw y mV, sin calibrar); no se publica por MQTT |
 | Bomba JT500 alimentada sola con la fuente de 12 V (sin ESP32) | Prueba corta el 2026-11-04: gira, silenciosa, caudal fuerte (observación del usuario). Sin medir corriente ni tiempo de uso continuo |
+| Bomba JT500 con el ESP32 (`src/pump.cpp`, GPIO26, tecla `p`) | Probada en hardware el 2026-11-16 (observación del usuario): con un ESP32 nuevo, MOSFET IRLZ44Z (el del cooler) y R2 de 10 kΩ, la bomba gira cuando se pulsa `p` y no arranca al enchufar. La etapa del cooler está desconectada. Sin medir corriente, calentamiento del MOSFET ni la tensión de compuerta. El firmware no se modificó. Antes de esto, las pruebas se falsearon por un cable rojo suelto del adaptador plug a bornes. El primer ESP32 dejó de responder tras un posible contacto de un cable de 12 V (sin confirmar) y se reemplazó |
 | Cooler (`src/cooler.cpp`, GPIO17) | Implementado y compilado (`pio run`, 2026-11-12). Probado en hardware: el usuario confirmó que al pulsar `f` en el monitor serie el cooler funciona (observación del usuario, 2026-11-12). Tecla `f` alterna encendido/apagado, sin límite de tiempo. No se midió corriente ni calentamiento del MOSFET. Sin control automático ni MQTT |
 | Resto del sistema | No implementado |
 
