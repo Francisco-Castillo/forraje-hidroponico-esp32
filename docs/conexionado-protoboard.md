@@ -24,6 +24,7 @@ Estado (2026-11-16): el sensor de suelo **no está conectado** (con P34 al aire 
 ### Riesgos detectados
 
 1. **Corriente de la bomba por la protoboard.** Unos 1,25 A (más el arranque) pasan por contactos de protoboard y cables finos; el valor típico que se cita para estos contactos es de alrededor de 1 A (dato general, no medido). Para este montaje: **solo pruebas cortas**, toca el MOSFET y los cables para notar calentamiento. Para uso continuo, pasar la etapa de potencia a placa perforada o bornes. El cooler comparte el riel de +12 V: si consume unos 0,25 A (supuesto), el total ronda 1,5 A, aún por debajo del fusible de 3 A, pero hay que medirlo.
+1a. **Rieles divididos en segmentos.** En la protoboard del usuario las bandas de + y − están partidas en segmentos: un hueco del riel puede no estar conectado con el otro extremo. Por eso el LED de la luz (GPIO25) no encendió hasta cambiar el retorno a GND de segmento (observación del usuario, 2026-11-20). Comprobar la continuidad de cada riel, o unir los segmentos con un puente, antes de dar por buena una conexión; afecta también a los rieles de +3,3 V, +12 V y GND.
 1b. **Polaridad del cooler.** Funciona con negro (−) y blanco (+), pero no se leyó en su etiqueta; si cambias de cooler, confírmala antes de conectarlo.
 2. **Polaridad.** Un error de polaridad puede dañar la bomba (si tiene electrónica interna) y el capacitor electrolítico. El diodo en inverso quemaría el fusible.
 3. **Sin protección contra marcha en seco todavía.** Requiere firmware que lea el flotador y bloquee el riego. Hasta entonces, la bomba solo se prueba a mano y sumergida.
@@ -62,6 +63,8 @@ Pines del ESP32 leídos del serigrafiado de la foto (ver [hardware-inventory.md]
 | 24 | **Drenador (D)** del MOSFET 2 | Cable negro del cooler (vía regleta 2) y ánodo del diodo 2 | Color según el usuario; polaridad sin confirmar |
 | 25 | Cátodo del diodo 2 1N5819 (banda) | Riel inferior +12 V | |
 | 26 | Cable blanco del cooler (+) | Riel inferior +12 V (vía regleta 2) | Polaridad sin confirmar |
+| 27 | Pin **P25** (GPIO25) del ESP32 | Resistencia R5 220 Ω → ánodo (pata larga, +) del LED | LED de prueba de la luz (`src/light.cpp`). Pin sin verificar en hardware |
+| 28 | Cátodo (pata corta, −) del LED | Riel superior `−` (GND) | Sin R5 el LED se quema. Es solo una luz indicadora: la lámpara real y su etapa de potencia no están elegidas |
 | — | Cable amarillo de la bomba | **No se conecta**, punta aislada | |
 
 El ESP32 se alimenta por su USB; los 12 V solo van a la bomba y al cooler. **Nunca** conectes 12 V a un pin ni al 3V3 del ESP32.

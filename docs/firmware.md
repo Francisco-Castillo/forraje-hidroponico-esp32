@@ -26,6 +26,14 @@ Contrato de referencia (fuente de verdad): `docs/mqtt-contract.md` del backend `
 - Lectura inválida (2026-11-20, **compila; no probado en hardware**): si el promedio de las 16 muestras es 0, el campo `soilMoistureRaw` se omite del mensaje (el backend lo guarda como nulo y el frontend muestra "Sin datos"). Un capacitivo sano no llega a 0 V ni en agua (~1 V), así que un 0 indica pin flotando o sensor sin alimentación. Motivo: el 2026-11-20 se vieron en la base saltos entre 0 y ~3700 (el usuario reportó que marcaba 0 por momentos y de golpe ~3260; no se registró en qué condición estaba el sensor). Esto **no corrige el cableado**: solo evita guardar ese dato como medición. Por el monitor serie se imprime además el mínimo y el máximo de las 16 muestras para distinguir ruido de pérdida de señal.
 - Estado: compilado y probado en el ESP32 el 2026-10-29 (camino feliz: publica, llega al broker y se guarda). Casos de fallo sin probar; el valor sigue **sin calibrar**.
 
+## Iluminación (horario automático)
+
+- `src/light.cpp`, salida en **GPIO25** (pin del serigrafiado de la placa). Hoy no hay luz ni etapa de potencia conectada: la salida se probó con un LED y una resistencia de 220 Ω.
+- Modo automático: encendida de **20:00 a 06:00** hora local (ventana que cruza la medianoche; constantes `LIGHT_ON_HOUR` y `LIGHT_OFF_HOUR`). Zona horaria fija **UTC-3** (Argentina, sin horario de verano), configurada en `configTime` de `main.cpp`. La publicación MQTT sigue en UTC.
+- Sin hora NTP válida (sin Wi-Fi desde el arranque) la luz queda **apagada**. Si se corta el Wi-Fi después de sincronizar, el reloj interno sigue y el horario continúa.
+- Tecla `l` por el monitor serie: pasa a modo manual (invierte el estado actual); otra `l` vuelve al horario. Tras un reinicio vuelve al modo automático.
+- Estado: implementado y compilado (`pio run`, 2026-11-20). **Probado en hardware el 2026-11-20 (confirmación del usuario): con la tecla `l` el LED en GPIO25 enciende.** El horario automático (20:00–06:00) **aún no se observó** funcionando. Primer intento fallido por un cableado: los rieles de la protoboard estaban divididos en segmentos y el LED no recibía GND. Sin control por MQTT.
+
 ## Diferencias con el contrato
 
 - **QoS 0**: PubSubClient no publica con QoS 1; el contrato pide QoS 1. Un mensaje puede perderse sin aviso. Aceptado para la primera versión.

@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1800 1060" width="1800" height="1060">
 <rect width="1800" height="1060" fill="#ffffff"/>
-<text x="20" y="32" font-size="20" fill="#111" text-anchor="start" font-weight="bold" font-family="Arial, Helvetica, sans-serif">Conexionado propuesto en protoboard: ESP32 + DHT11 + humedad de suelo + flotador + bomba JT500 + cooler 12 V</text>
+<text x="20" y="32" font-size="20" fill="#111" text-anchor="start" font-weight="bold" font-family="Arial, Helvetica, sans-serif">Conexionado propuesto en protoboard: ESP32 + DHT11 + humedad de suelo + flotador + bomba JT500 + cooler 12 V + LED de luz (prueba)</text>
 <text x="20" y="54" font-size="12" fill="#b00020" text-anchor="start" font-weight="normal" font-family="Arial, Helvetica, sans-serif">PROPUESTA SIN PROBAR, hecha sobre el papel. Verifica cada dato de la lista de comprobación antes de conectar. Esquema ilustrativo: las posiciones exactas de los huecos dependen de tu protoboard.</text>
 <rect x="150" y="250" width="1176" height="356" rx="8" fill="#ece7da" stroke="#b5ae9a" stroke-width="1.5"/>
 <rect x="154" y="414" width="1168" height="30" rx="3" fill="#d6d0bf" stroke="none" stroke-width="1"/>
@@ -1050,8 +1050,8 @@
 <circle cx="324" cy="288" r="3.6" fill="#1a1a1a" stroke="#fff"/>
 <text x="594" y="292" font-size="10" fill="#fff" stroke="#fff" stroke-width="4" stroke-linejoin="round" text-anchor="start" font-weight="bold" font-family="Arial, Helvetica, sans-serif">DATA del DHT11 a P4 (GPIO4)</text>
 <text x="594" y="292" font-size="10" fill="#8a6d00" text-anchor="start" font-weight="bold" font-family="Arial, Helvetica, sans-serif">DATA del DHT11 a P4 (GPIO4)</text>
-<text x="510" y="322" font-size="9" fill="#fff" stroke="#fff" stroke-width="4" stroke-linejoin="round" text-anchor="start" font-weight="bold" font-family="Arial, Helvetica, sans-serif">AOUT a P34</text>
-<text x="510" y="322" font-size="9" fill="#14532d" text-anchor="start" font-weight="bold" font-family="Arial, Helvetica, sans-serif">AOUT a P34</text>
+<text x="510" y="306" font-size="9" fill="#fff" stroke="#fff" stroke-width="4" stroke-linejoin="round" text-anchor="start" font-weight="bold" font-family="Arial, Helvetica, sans-serif">AOUT a P34</text>
+<text x="510" y="306" font-size="9" fill="#14532d" text-anchor="start" font-weight="bold" font-family="Arial, Helvetica, sans-serif">AOUT a P34</text>
 <path d="M396,330 V312 H846 V518 H900 V528" fill="none" stroke="#f97316" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round" opacity="0.95"/>
 <circle cx="396" cy="330" r="3.6" fill="#f97316" stroke="#fff"/>
 <circle cx="900" cy="528" r="3.6" fill="#f97316" stroke="#fff"/>
@@ -1306,4 +1306,33 @@
 <text x="32" y="946" font-size="11" fill="#111" text-anchor="start" font-weight="normal" font-family="Arial, Helvetica, sans-serif">• Bomba sumergida antes de enchufar. Nunca en seco.</text>
 <text x="32" y="965" font-size="11" fill="#111" text-anchor="start" font-weight="normal" font-family="Arial, Helvetica, sans-serif">• * Cooler: negro (−) y blanco (+) SIN CONFIRMAR; mira etiqueta o flecha.</text>
 <text x="32" y="984" font-size="11" fill="#111" text-anchor="start" font-weight="normal" font-family="Arial, Helvetica, sans-serif">• Cooler: corriente sin medir; con la bomba suma ≈1,5 A de los 3 A de la fuente.</text>
+<path d="M417,330 V322 H666 V330" fill="none" stroke="#c026d3" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round" opacity="0.95"/>
+<circle cx="417" cy="330" r="3.6" fill="#c026d3" stroke="#fff"/>
+<circle cx="666" cy="330" r="3.6" fill="#c026d3" stroke="#fff"/>
+<line x1="666" y1="348" x2="738" y2="348" stroke="#777" stroke-width="2"/>
+<rect x="685.0" y="343" width="34" height="10" rx="5" fill="#e7cfa0" stroke="#8a6d3b" stroke-width="1"/>
+<rect x="692.0" y="343" width="3" height="10" rx="0" fill="#b91c1c" stroke="none" stroke-width="1"/>
+<rect x="699.0" y="343" width="3" height="10" rx="0" fill="#b91c1c" stroke="none" stroke-width="1"/>
+<rect x="706.0" y="343" width="3" height="10" rx="0" fill="#78350f" stroke="none" stroke-width="1"/>
+<rect x="713.0" y="343" width="3" height="10" rx="0" fill="#d4af37" stroke="none" stroke-width="1"/>
+<text x="676" y="339" font-size="10" fill="#fff" stroke="#fff" stroke-width="4" stroke-linejoin="round" text-anchor="start" font-weight="bold" font-family="Arial, Helvetica, sans-serif">R5  220 Ω</text>
+<text x="676" y="339" font-size="10" fill="#111" text-anchor="start" font-weight="bold" font-family="Arial, Helvetica, sans-serif">R5  220 Ω</text>
+<line x1="738" y1="348" x2="738" y2="366" stroke="#777" stroke-width="2"/>
+<line x1="738" y1="366" x2="810" y2="366" stroke="#777" stroke-width="2"/>
+<circle cx="774" cy="366" r="11" fill="#ef4444" stroke="#991b1b" stroke-width="1.5"/>
+<rect x="765" y="360" width="4" height="12" fill="#fecaca" stroke="none" opacity="0.7"/>
+<line x1="783" y1="357" x2="788" y2="351" stroke="#ef4444" stroke-width="1.6"/>
+<line x1="788" y1="362" x2="794" y2="357" stroke="#ef4444" stroke-width="1.6"/>
+<text x="742" y="382" font-size="10" fill="#111" text-anchor="middle" font-weight="bold" font-family="Arial, Helvetica, sans-serif">+</text>
+<text x="806" y="382" font-size="12" fill="#111" text-anchor="middle" font-weight="bold" font-family="Arial, Helvetica, sans-serif">−</text>
+<text x="730" y="398" font-size="10" fill="#fff" stroke="#fff" stroke-width="4" stroke-linejoin="round" text-anchor="start" font-weight="bold" font-family="Arial, Helvetica, sans-serif">LED (luz de prueba)</text>
+<text x="730" y="398" font-size="10" fill="#7f1d1d" text-anchor="start" font-weight="bold" font-family="Arial, Helvetica, sans-serif">LED (luz de prueba)</text>
+<text x="730" y="410" font-size="9" fill="#fff" stroke="#fff" stroke-width="4" stroke-linejoin="round" text-anchor="start" font-weight="normal" font-family="Arial, Helvetica, sans-serif">pata larga (+) a R5</text>
+<text x="730" y="410" font-size="9" fill="#333" text-anchor="start" font-weight="normal" font-family="Arial, Helvetica, sans-serif">pata larga (+) a R5</text>
+<path d="M810,366 V288" fill="none" stroke="#1a1a1a" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round" opacity="0.95"/>
+<circle cx="810" cy="366" r="3.6" fill="#1a1a1a" stroke="#fff"/>
+<circle cx="810" cy="288" r="3.6" fill="#1a1a1a" stroke="#fff"/>
+<line x1="34" y1="1003" x2="64" y2="1003" stroke="#c026d3" stroke-width="5" stroke-linecap="round"/>
+<text x="72" y="1007" font-size="11" fill="#111" text-anchor="start" font-weight="normal" font-family="Arial, Helvetica, sans-serif">P25 → R5 → LED (luz de prueba, GPIO25 sin verificar)</text>
+<text x="32" y="1026" font-size="11" fill="#111" text-anchor="start" font-weight="normal" font-family="Arial, Helvetica, sans-serif">• LED: pata larga (+) hacia R5, pata corta (−) a GND; sin R5 se quema.</text>
 </svg>

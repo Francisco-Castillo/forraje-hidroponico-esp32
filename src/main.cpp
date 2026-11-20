@@ -6,6 +6,7 @@
 #include "moisture.h"
 #include "pump.h"
 #include "cooler.h"
+#include "light.h"
 
 constexpr uint8_t DHT_PIN = 4;
 constexpr uint32_t TIMEOUT_US = 200;
@@ -172,6 +173,7 @@ void setup() {
   moistureBegin();
   pumpBegin();
   coolerBegin();
+  lightBegin();
 
   bootId = esp_random();
   snprintf(topic, sizeof(topic), "fvh/%s/lecturas", DEVICE_ID);
@@ -179,7 +181,9 @@ void setup() {
 
   WiFi.mode(WIFI_STA);
   WiFi.setAutoReconnect(true);
-  configTime(0, 0, "pool.ntp.org", "time.google.com");  // UTC; sincroniza al haber red
+  // Hora local Argentina (UTC-3, sin horario de verano) para el horario de la luz.
+  // La publicacion MQTT sigue en UTC: usa gmtime_r sobre el epoch, que no depende de esto.
+  configTime(-3 * 3600, 0, "pool.ntp.org", "time.google.com");
   mqtt.setServer(MQTT_HOST, MQTT_PORT);
   mqtt.setBufferSize(MQTT_BUFFER_SIZE);
   mqtt.setSocketTimeout(3);
@@ -192,12 +196,15 @@ void loop() {
 
   // Prueba manual de la bomba: 'p' por el monitor serie la enciende (se apaga sola)
   pumpUpdate();
+  lightUpdate();
   while (Serial.available()) {
     char c = Serial.read();
     if (c == 'p' && !pumpIsOn()) {
       pumpStart();
       Serial.println("Bomba: encendida");
     }
+    // Luz: 'l' pasa a modo manual (invierte el estado); otra 'l' vuelve al horario
+    if (c == 'l') lightToggleManual();
     // Prueba manual del cooler: 'f' lo alterna (sin limite de tiempo)
     if (c == 'f') {
       if (coolerIsOn()) {
