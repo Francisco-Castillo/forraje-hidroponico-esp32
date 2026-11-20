@@ -135,8 +135,9 @@ static void maintainMqtt() {
 }
 
 // Publica la lectura segun docs/mqtt-contract.md del backend. Devuelve true si se envio.
-// soilRaw: valor crudo del ADC (0-4095), campo opcional `soilMoistureRaw`, sin calibrar.
-static bool publishReading(time_t ts, float tempC, float humidity, uint16_t soilRaw) {
+// soil: valor crudo del ADC (0-4095), campo opcional `soilMoistureRaw`, sin calibrar.
+// Si la lectura no es valida (soil.valid == false) el campo se omite; el backend lo guarda como nulo.
+static bool publishReading(time_t ts, float tempC, float humidity, const MoistureReading& soil) {
   if (ts < MIN_VALID_EPOCH) {
     Serial.println("Sin hora NTP valida: no se publica");
     return false;
@@ -150,11 +151,14 @@ static bool publishReading(time_t ts, float tempC, float humidity, uint16_t soil
   char iso[24];
   strftime(iso, sizeof(iso), "%Y-%m-%dT%H:%M:%SZ", &tmUtc);
 
+  char soilField[32] = "";
+  if (soil.valid) snprintf(soilField, sizeof(soilField), ",\"soilMoistureRaw\":%u", soil.raw);
+
   char payload[MQTT_BUFFER_SIZE];
   snprintf(payload, sizeof(payload),
            "{\"deviceId\":\"%s\",\"messageId\":\"%s-%08lx-%lu\",\"timestamp\":\"%s\","
-           "\"measurements\":{\"temperatureC\":%.1f,\"relativeHumidityPct\":%.1f,\"soilMoistureRaw\":%u}}",
-           DEVICE_ID, DEVICE_ID, (unsigned long)bootId, (unsigned long)messageCount, iso, tempC, humidity, soilRaw);
+           "\"measurements\":{\"temperatureC\":%.1f,\"relativeHumidityPct\":%.1f%s}}",
+           DEVICE_ID, DEVICE_ID, (unsigned long)bootId, (unsigned long)messageCount, iso, tempC, humidity, soilField);
 
   bool ok = mqtt.publish(topic, payload);
   Serial.printf("Publicacion %s: %s\n", ok ? "OK" : "FALLO", payload);
@@ -211,13 +215,15 @@ void loop() {
   lastRead = millis();
 
   MoistureReading soil = moistureRead();
-  Serial.printf("Suelo (sin calibrar): raw=%u  %lu mV\n", soil.raw, (unsigned long)soil.millivolts);
+  Serial.printf("Suelo (sin calibrar): raw=%u (min %u, max %u)  %lu mV\n", soil.raw, soil.minRaw, soil.maxRaw,
+                (unsigned long)soil.millivolts);
+  if (!soil.valid) Serial.println("Suelo: lectura 0 (sin senal o sin alimentacion): no se publica soilMoistureRaw");
 
   float t, h;
   DhtResult r = readDHT11(t, h);
   if (r == DHT_OK) {
     Serial.printf("Temperatura: %.1f C  Humedad: %.1f %%\n", t, h);
-    publishReading(time(nullptr), t, h, soil.raw);
+    publishReading(time(nullptr), t, h, soil);
   } else {
     Serial.println("Temperatura: NaN  Humedad: NaN");
   }

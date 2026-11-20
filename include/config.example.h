@@ -16,4 +16,4 @@
 // El topico de publicacion se deriva: fvh/<DEVICE_ID>/lecturas
 #define DEVICE_ID      "esp32-fvh-01"
 
-#define READ_INTERVAL_MS 2000
+#define READ_INTERVAL_MS 60000

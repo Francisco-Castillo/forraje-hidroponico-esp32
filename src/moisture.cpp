@@ -10,9 +10,14 @@ void moistureBegin() {
 
 MoistureReading moistureRead() {
   uint32_t sumRaw = 0, sumMv = 0;
+  uint16_t minRaw = 4095, maxRaw = 0;
   for (uint8_t i = 0; i < SAMPLES; i++) {
-    sumRaw += analogRead(MOISTURE_PIN);
+    uint16_t raw = analogRead(MOISTURE_PIN);
+    sumRaw += raw;
+    minRaw = min(minRaw, raw);
+    maxRaw = max(maxRaw, raw);
     sumMv += analogReadMilliVolts(MOISTURE_PIN);
   }
-  return {static_cast<uint16_t>(sumRaw / SAMPLES), sumMv / SAMPLES};
+  uint16_t avgRaw = static_cast<uint16_t>(sumRaw / SAMPLES);
+  return {avgRaw, sumMv / SAMPLES, minRaw, maxRaw, avgRaw > 0};
 }
